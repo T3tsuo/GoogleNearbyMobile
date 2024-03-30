@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Random;
 
 public class LocationCheckService extends Service {
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -30,6 +31,7 @@ public class LocationCheckService extends Service {
     Integer NEARBY_WAIT_REFRESH = 3600;
     double NEARBY_DISTANCE_KM = 0.3;
     static double LOCATION_DISTANCE_KM = 0.15;
+    int notificationId = 2;
 
     @Override
     public void onCreate() {
@@ -64,7 +66,9 @@ public class LocationCheckService extends Service {
     public void makeNotification(String data) {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, getNotification(data));
+        notificationManager.notify(notificationId, getNotification(data));
+        // increase id so it doesn't replace previous id
+        notificationId++;
     }
 
     private Notification getNotification(String data) {
@@ -103,17 +107,13 @@ public class LocationCheckService extends Service {
                 reader.run();
                 // grab people's data
                 ArrayList<People> peopleData = reader.getPeoples();
-                StringBuilder message = new StringBuilder();
 
                 if (peopleData != null) {
-                    // check saved locations
-                    message.append(checkLocation(peopleData, peoplesLocation));
-                    message.append(checkNearby(peopleData));
+                    // check saved locations and notify
+                    checkLocation(peopleData, peoplesLocation);
+                    // check nearby and notify
+                    checkNearby(peopleData);
 
-                    if (!message.toString().isEmpty()) {
-                        // make notification
-                        makeNotification(message.toString());
-                    }
                 }
 
             }
@@ -154,8 +154,7 @@ public class LocationCheckService extends Service {
         return temp;
     }
 
-    public StringBuilder checkNearby(ArrayList<People> peopleData) {
-        StringBuilder message = new StringBuilder();
+    public void checkNearby(ArrayList<People> peopleData) {
         // everybody compares their location to the current user
         People currentUser = getCurrentUser(peopleData);
         if (currentUser != null) {
@@ -178,17 +177,17 @@ public class LocationCheckService extends Service {
                         nearbyPerson.setNear(isNear);
                         Date actual = new Date();
                         // add one hour expiration
-                        Timestamp currentTime = new Timestamp(actual.getTime() + 3600*1000);
+                        Timestamp currentTime = new Timestamp(actual.getTime() +
+                                NEARBY_WAIT_REFRESH*1000);
                         // set new timestamp to expire in an hour
                         nearbyPerson.setTimeStamp(currentTime);
 
-                        // build message
+                        // notify
                         if (isNear) {
-                            message.append(person.getName()).append(" is ")
-                                    .append(Math.round(distance * 100000.0) / 100.0)
-                                    .append(" meters away");
+                            makeNotification(person.getName() + " is " +
+                                    Math.round(distance * 100000.0) / 100.0 + " meters away");
                         } else {
-                            message.append(person.getName()).append(" is no longer nearby");
+                            makeNotification(person.getName() + " is no longer nearby");
                         }
                     }
                 } else if (nearbyPerson == null) {
@@ -199,8 +198,6 @@ public class LocationCheckService extends Service {
                 }
             }
         }
-
-        return message;
     }
 
     public PeopleNearby isInNearbyList(String name) {
@@ -212,9 +209,8 @@ public class LocationCheckService extends Service {
         return null;
     }
 
-    public static StringBuilder checkLocation(ArrayList<People> peopleList,
+    public void checkLocation(ArrayList<People> peopleList,
                                        ArrayList<PeopleLocation> locationData) {
-        StringBuilder message = new StringBuilder();
         for (PeopleLocation peopleLocation: locationData) {
             People currentPerson = getPersonFromName(peopleList, peopleLocation.getName());
             // now check location difference, make sure person is not null nor their location
@@ -223,20 +219,18 @@ public class LocationCheckService extends Service {
                         peopleLocation.getLongitude(),
                         currentPerson.getCurrentLocation().getLatitude(),
                         currentPerson.getCurrentLocation().getLongitude());
-                // if they just arrived at the location
+                // if they just arrived at the location NOTIFY
                 if (distance <= LOCATION_DISTANCE_KM && !peopleLocation.isAtLocation()) {
                     peopleLocation.setAtLocation(true);
-                    message.append(peopleLocation.getName()).append(" has arrived at ")
-                            .append(peopleLocation.getPlace());
+                    makeNotification(peopleLocation.getName() + " has arrived at " +
+                            peopleLocation.getPlace());
                 } else if (distance > LOCATION_DISTANCE_KM && peopleLocation.isAtLocation()) {
                     peopleLocation.setAtLocation(false);
-                    message.append(peopleLocation.getName()).append(" just left ")
-                            .append(peopleLocation.getPlace());
+                    makeNotification(peopleLocation.getName() + " just left " +
+                            peopleLocation.getPlace());
                 }
             }
         }
-
-        return message;
     }
 
     private static People getPersonFromName(ArrayList<People> peopleData, String name) {
