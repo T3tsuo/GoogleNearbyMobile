@@ -4,17 +4,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,8 +18,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.googlenearbymobile.LocationSharingLibJava.src.CookieReader;
-import com.example.googlenearbymobile.LocationSharingLibJava.src.People;
 
 
 import java.io.BufferedReader;
@@ -32,13 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     Button runBtn;
@@ -47,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     Map<String, String> cookies;
     String locationData;
     TextView textResult;
-    People currentUser;
 
     ActivityResultLauncher<Intent> cookieFileLauncher;
     ActivityResultLauncher<Intent> locationFileLauncher;

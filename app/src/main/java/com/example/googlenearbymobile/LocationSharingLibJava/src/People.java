@@ -1,11 +1,12 @@
 package com.example.googlenearbymobile.LocationSharingLibJava.src;
 
-import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
 
 public class People {
 
-    private String name;
-    private Point currentLocation;
+    private final String name;
+    private final Point currentLocation;
 
     public People(String name, Double longitude, Double latitude) {
         this.name = name;
@@ -25,6 +26,7 @@ public class People {
         return currentLocation;
     }
 
+    @NonNull
     public String toString() {
         return getName() + "    " + currentLocation;
     }

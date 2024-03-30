@@ -1,20 +1,16 @@
 package com.example.googlenearbymobile.LocationSharingLibJava.src;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 public class CookieReader {
 
-    private ArrayList<People> peopleInfo;
     private String url;
     Map<String, String> params;
     Map<String, String> cookies;
@@ -45,8 +41,7 @@ public class CookieReader {
         try {
             unprocessedData = sendGetRequest(url, params, cookies).split("'");
             // seperate people's data in 2d array
-            this.peopleInfo = dataToListFormat(unprocessedData);
-            return this.peopleInfo;
+            return dataToListFormat(unprocessedData);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -58,8 +53,8 @@ public class CookieReader {
         unprocessedData = unprocessedData[1].split("null,null,null,null,null");
         // data storage
         ArrayList<People> peopleInfo = new ArrayList<>();
-        String tempList[];
-        Boolean isUser = false;
+        String[] tempList;
+        boolean isUser = false;
         for (int i = 0; i < unprocessedData.length; i++) {
             // removes square brackets, unnessary spaces and quotations, splits into list format
             tempList = unprocessedData[i].replace("[", "").replace("]", "").
@@ -120,7 +115,7 @@ public class CookieReader {
             query.deleteCharAt(query.length() - 1);
         }
         // Append the query string to the url
-        url = url + "?" + query.toString();
+        url = url + "?" + query;
         // Create a URL object
         URL obj = new URL(url);
         // Open a connection

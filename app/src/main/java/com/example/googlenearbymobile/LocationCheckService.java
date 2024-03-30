@@ -19,7 +19,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
-import java.util.Random;
 
 public class LocationCheckService extends Service {
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -99,7 +98,7 @@ public class LocationCheckService extends Service {
         return null;
     }
 
-    private Runnable sendUpdatesToPhone = new Runnable() {
+    private final Runnable sendUpdatesToPhone = new Runnable() {
         public void run() {
             // code starts here
             if (cookies != null) {
@@ -252,7 +251,7 @@ public class LocationCheckService extends Service {
     }
 
     private static double distanceKilometer(double lat1, double lon1, double lat2, double lon2) {
-        Double p = Math.PI / 180;
+        double p = Math.PI / 180;
         double a = 0.5 - Math.cos((lat2 - lat1) * p) / 2 +
                 Math.cos(lat1 * p) * Math.cos(lat2 * p) * (1 - Math.cos((lon2 - lon1) * p)) / 2;
         return 12742 * Math.asin(Math.sqrt(a));
