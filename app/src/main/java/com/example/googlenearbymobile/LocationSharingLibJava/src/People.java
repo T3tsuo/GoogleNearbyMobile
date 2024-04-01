@@ -13,11 +13,6 @@ public class People {
         this.currentLocation = new Point(longitude, latitude);
     }
 
-    public People(String name) {
-        this.name = name;
-        this.currentLocation = null;
-    }
-
     public String getName() {
         return name;
     }

@@ -79,21 +79,21 @@ public class CookieReader {
                 Double latitude = Double.parseDouble(tempList[tempList.length - 13]);
                 return new People("Current User", longitude, latitude);
             } catch (Exception e) {
-                return new People("Current User");
+                return null;
             }
         }
         for (int i = 0; i < tempList.length; i++) {
             if (tempList[i].contains("googleusercontent")) {
                 String name = tempList[i + 2];
                 if (!name.matches("^[A-Za-z- ]+")) {
-                    return new People("Error");
+                    return null;
                 }
                 try {
                     Double longitude = Double.parseDouble(tempList[i + 10]);
                     Double latitude = Double.parseDouble(tempList[i + 9]);
                     return new People(name, longitude, latitude);
                 } catch (Exception e) {
-                    return new People(name);
+                    return null;
                 }
             }
         }

@@ -158,42 +158,44 @@ public class LocationCheckService extends Service {
         People currentUser = getCurrentUser(peopleData);
         if (currentUser != null) {
             for (People person: peopleData) {
-                PeopleNearby nearbyPerson = isInNearbyList(person.getName());
-                // if the nearby person is in our list
-                if (nearbyPerson != null && !person.getName().equals("Current User") &&
-                        person.getCurrentLocation() != null) {
-                    // only see if they're nearby if it's not the nearby user
-                    double distance =
-                            distanceKilometer(currentUser.getCurrentLocation().getLatitude(),
-                                    currentUser.getCurrentLocation().getLongitude(),
-                                    person.getCurrentLocation().getLatitude(),
-                                    person.getCurrentLocation().getLongitude());
-                    boolean isNear = distance <= NEARBY_DISTANCE_KM;
-                    // if the timestamp has been passed an hour and the user use to be nearby
-                    // and no longer is, or reverse.
-                    if (nearbyPerson.canRefresh(isNear)) {
-                        // set the new boolean
-                        nearbyPerson.setNear(isNear);
-                        Date actual = new Date();
-                        // add one hour expiration
-                        Timestamp currentTime = new Timestamp(actual.getTime() +
-                                NEARBY_WAIT_REFRESH*1000);
-                        // set new timestamp to expire in an hour
-                        nearbyPerson.setTimeStamp(currentTime);
+                // if the person isn't offline
+                if (person != null) {
+                    PeopleNearby nearbyPerson = isInNearbyList(person.getName());
+                    // if the nearby person is in our list
+                    if (nearbyPerson != null && !person.getName().equals("Current User")) {
+                        // only see if they're nearby if it's not the nearby user
+                        double distance =
+                                distanceKilometer(currentUser.getCurrentLocation().getLatitude(),
+                                        currentUser.getCurrentLocation().getLongitude(),
+                                        person.getCurrentLocation().getLatitude(),
+                                        person.getCurrentLocation().getLongitude());
+                        boolean isNear = distance <= NEARBY_DISTANCE_KM;
+                        // if the timestamp has been passed an hour and the user use to be nearby
+                        // and no longer is, or reverse.
+                        if (nearbyPerson.canRefresh(isNear)) {
+                            // set the new boolean
+                            nearbyPerson.setNear(isNear);
+                            Date actual = new Date();
+                            // add one hour expiration
+                            Timestamp currentTime = new Timestamp(actual.getTime() +
+                                    NEARBY_WAIT_REFRESH*1000);
+                            // set new timestamp to expire in an hour
+                            nearbyPerson.setTimeStamp(currentTime);
 
-                        // notify
-                        if (isNear) {
-                            makeNotification(person.getName() + " is " +
-                                    Math.round(distance * 100000.0) / 100.0 + " meters away");
-                        } else {
-                            makeNotification(person.getName() + " is no longer nearby");
+                            // notify
+                            if (isNear) {
+                                makeNotification(person.getName() + " is " +
+                                        Math.round(distance * 100000.0) / 100.0 + " meters away");
+                            } else {
+                                makeNotification(person.getName() + " is no longer nearby");
+                            }
                         }
+                    } else if (nearbyPerson == null) {
+                        // if person is not in the nearby list but appeared, add them to the list
+                        Date actual = new Date();
+                        Timestamp currentTime = new Timestamp(actual.getTime());
+                        peoplesNearby.add(new PeopleNearby(person, currentTime, false));
                     }
-                } else if (nearbyPerson == null) {
-                    // if person is not in the nearby list but appeared, add them to the list
-                    Date actual = new Date();
-                    Timestamp currentTime = new Timestamp(actual.getTime());
-                    peoplesNearby.add(new PeopleNearby(person, currentTime, false));
                 }
             }
         }
@@ -213,7 +215,7 @@ public class LocationCheckService extends Service {
         for (PeopleLocation peopleLocation: locationData) {
             People currentPerson = getPersonFromName(peopleList, peopleLocation.getName());
             // now check location difference, make sure person is not null nor their location
-            if (currentPerson != null && currentPerson.getCurrentLocation() != null) {
+            if (currentPerson != null) {
                 double distance = distanceKilometer(peopleLocation.getLatitude(),
                         peopleLocation.getLongitude(),
                         currentPerson.getCurrentLocation().getLatitude(),
@@ -234,7 +236,7 @@ public class LocationCheckService extends Service {
 
     private static People getPersonFromName(ArrayList<People> peopleData, String name) {
         for (People person: peopleData) {
-            if (name.equals(person.getName())) {
+            if (person != null && name.equals(person.getName())) {
                 return person;
             }
         }
@@ -243,7 +245,7 @@ public class LocationCheckService extends Service {
 
     private static People getCurrentUser(ArrayList<People> peopleData) {
         for (People person: peopleData) {
-            if (person.getName().equals("Current User")) {
+            if (person != null && person.getName().equals("Current User")) {
                 return person;
             }
         }
