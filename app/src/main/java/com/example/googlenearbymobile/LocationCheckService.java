@@ -125,9 +125,11 @@ public class LocationCheckService extends Service {
         ArrayList<PeopleNearby> temp = new ArrayList<>();
 
         for (People people: peopleList) {
-            Date actual = new Date();
-            Timestamp currentTime = new Timestamp(actual.getTime());
-            temp.add(new PeopleNearby(people, currentTime, false));
+            if (people != null) {
+                Date actual = new Date();
+                Timestamp currentTime = new Timestamp(actual.getTime());
+                temp.add(new PeopleNearby(people, currentTime, false));
+            }
         }
 
         return temp;
@@ -165,10 +167,9 @@ public class LocationCheckService extends Service {
                     if (nearbyPerson != null && !person.getName().equals("Current User")) {
                         // only see if they're nearby if it's not the nearby user
                         double distance =
-                                distanceKilometer(currentUser.getCurrentLocation().getLatitude(),
-                                        currentUser.getCurrentLocation().getLongitude(),
-                                        person.getCurrentLocation().getLatitude(),
-                                        person.getCurrentLocation().getLongitude());
+                                distanceKilometer(currentUser.getLatitude(),
+                                        currentUser.getLongitude(), person.getLatitude(),
+                                        person.getLongitude());
                         boolean isNear = distance <= NEARBY_DISTANCE_KM;
                         // if the timestamp has been passed an hour and the user use to be nearby
                         // and no longer is, or reverse.
@@ -218,8 +219,7 @@ public class LocationCheckService extends Service {
             if (currentPerson != null) {
                 double distance = distanceKilometer(peopleLocation.getLatitude(),
                         peopleLocation.getLongitude(),
-                        currentPerson.getCurrentLocation().getLatitude(),
-                        currentPerson.getCurrentLocation().getLongitude());
+                        currentPerson.getLatitude(), currentPerson.getLongitude());
                 // if they just arrived at the location NOTIFY
                 if (distance <= LOCATION_DISTANCE_KM && !peopleLocation.isAtLocation()) {
                     peopleLocation.setAtLocation(true);

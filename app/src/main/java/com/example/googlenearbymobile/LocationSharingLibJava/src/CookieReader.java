@@ -85,15 +85,14 @@ public class CookieReader {
         for (int i = 0; i < tempList.length; i++) {
             if (tempList[i].contains("googleusercontent")) {
                 String name = tempList[i + 2];
-                if (!name.matches("^[A-Za-z- ]+")) {
-                    return null;
-                }
-                try {
-                    Double longitude = Double.parseDouble(tempList[i + 10]);
-                    Double latitude = Double.parseDouble(tempList[i + 9]);
-                    return new People(name, longitude, latitude);
-                } catch (Exception e) {
-                    return null;
+                if (name.matches("^[A-Za-z- ]+")) {
+                    try {
+                        Double longitude = Double.parseDouble(tempList[i + 10]);
+                        Double latitude = Double.parseDouble(tempList[i + 9]);
+                        return new People(name, longitude, latitude);
+                    } catch (Exception e) {
+                        return null;
+                    }
                 }
             }
         }

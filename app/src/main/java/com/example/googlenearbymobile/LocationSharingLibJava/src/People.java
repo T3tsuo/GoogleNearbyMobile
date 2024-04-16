@@ -6,23 +6,27 @@ import androidx.annotation.NonNull;
 public class People {
 
     private final String name;
-    private final Point currentLocation;
+    private final double latitude;
+    private final double longitude;
 
     public People(String name, Double longitude, Double latitude) {
         this.name = name;
-        this.currentLocation = new Point(longitude, latitude);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
         return name;
     }
 
-    public Point getCurrentLocation() {
-        return currentLocation;
+    public double getLatitude() {
+        return latitude;
     }
+
+    public double getLongitude() { return longitude; }
 
     @NonNull
     public String toString() {
-        return getName() + "    " + currentLocation;
+        return getName() + "    (" + latitude + ", " + longitude + ")";
     }
 }
