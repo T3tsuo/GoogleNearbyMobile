@@ -4,8 +4,8 @@ Looked at what the python library locationsharinglib does and did the bare minim
 ## How to get cookies file on Android without a PC.
 * First download Kiwi Browser on the Google Playstore (allows extensions).
 * Only use one google account on this browser and stay on desktop mode.
-* Click on this extention [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc) then Add to Chrome to the Kiwi Browser.
-* Go to specifically [google.com/maps](https://google.com/maps) and login OR log out and relogin to the google account you want to use.
+* Click on this extention <a href="https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc" target="_blank">Get cookies.txt LOCALLY</a> then Add to Chrome to the Kiwi Browser.
+* Go to specifically <a href="https://google.com/maps" target="_blank">google.com/maps</a> and login OR log out and relogin to the google account you want to use.
     * it can take a while to load the entire page.
 * Once logged in. Click on the browsers three dots on the top right and scroll down until you find the Cookies extension and click it.
 * Click on "Export" to extract the cookie file, DO NOT click on "Export As" or "Export All Cookies".
