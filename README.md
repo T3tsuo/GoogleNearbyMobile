@@ -12,7 +12,7 @@ Looked at what the python library locationsharinglib does and did the bare minim
 * Click on "Export" to extract the cookie file, DO NOT click on "Export As" or "Export All Cookies".
 
 ## Saved Locations text file Example:
-Purpose: The app will load the saved locations file to check when a person is arriving or leaving the location you set in the file and then will push a notification to notifying the user.
+Purpose: The app will load the saved locations file to check when a person is arriving or leaving the locations you set in the file and then will push a notification to notifying the user.
 * Persons' name must match their exact full name on Google Maps.
 * The persons locations you want to be notified of should go like this: Full Name,Location,Lat,Long
     * with no spaces between the commas.
