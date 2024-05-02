@@ -8,7 +8,7 @@ Looked at what the python library locationsharinglib does and did the bare minim
 * Go to specifically <a href="https://google.com/maps" target="_blank">google.com/maps</a> and login to the google account you want to use.
     * If you are already logged in: LOGOUT and login again.
     * it can take a while to load the entire page.
-* Once logged in. Click on the browsers three dots on the top right and scroll down until you find the Cookies extension and click it.
+* Once logged in. Click on the browsers three dots on the top right and scroll down until you find the Get cookies.txt LOCALLY extension and click it.
 * Click on "Export" to extract the cookie file, DO NOT click on "Export As" or "Export All Cookies".
 
 ## Saved Locations text file Example:
