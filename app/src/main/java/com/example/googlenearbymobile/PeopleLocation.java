@@ -8,11 +8,11 @@ public class PeopleLocation {
     private final double latitude;
     private boolean atLocation;
 
-    public PeopleLocation(String name, String place, double longitude, double latitude) {
+    public PeopleLocation(String name, String place, double latitude, double longitude) {
         this.name = name;
         this.place = place;
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
         this.atLocation = false;
     }
 

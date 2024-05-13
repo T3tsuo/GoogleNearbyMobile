@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -50,53 +51,44 @@ public class CookieReader {
 
     private static ArrayList<People> dataToListFormat(String[] unprocessedData) {
         // split people data
-        unprocessedData = unprocessedData[1].split("null,null,null,null,null");
+        ParseString parser = new ParseString();
+        // remove all quotations around strings and remove spaces between commas
+        // makes it easier to parse
+        List<Object> nearbyData = parser.parseString(unprocessedData[1].
+                replace("\"", "").replace(", ", ","));
+
         // data storage
         ArrayList<People> peopleInfo = new ArrayList<>();
-        String[] tempList;
-        boolean isUser = false;
-        for (int i = 0; i < unprocessedData.length; i++) {
-            // removes square brackets, unnessary spaces and quotations, splits into list format
-            tempList = unprocessedData[i].replace("[", "").replace("]", "").
-                                replace("\"", "").replace(", ",",").split(",");
-            if (tempList.length != 0) {
-                if (i != unprocessedData.length - 1) {
-                    peopleInfo.add(findPersonData(tempList, isUser));
 
-                } else {
-                    isUser = true;
-                    peopleInfo.add(findPersonData(tempList, isUser));
-                }
-            }
-        }
-        return peopleInfo;
-    }
-
-    private static People findPersonData(String[] tempList, Boolean isUser) {
-        if (isUser) {
+        // add every persons name, lat and long except for current user
+        for (int i = 0; i < parser.
+                grabInnerList(nearbyData, new ArrayList<>(List.of(0))).size(); i++) {
             try {
-                Double longitude = Double.parseDouble(tempList[tempList.length - 12]);
-                Double latitude = Double.parseDouble(tempList[tempList.length - 13]);
-                return new People("Current User", longitude, latitude);
-            } catch (Exception e) {
-                return null;
+                peopleInfo.add(new People(
+                        parser.grabInnerData(nearbyData, new ArrayList<>(List.of(0, i, 0, 3))),
+                        Double.parseDouble(parser.grabInnerData(nearbyData,
+                                new ArrayList<>(List.of(0, i, 1, 1, 2)))),
+                        Double.parseDouble(parser.grabInnerData(nearbyData,
+                                new ArrayList<>(List.of(0, i, 1, 1, 1))))));
+            }
+            // if person is offline, add null
+            catch (Exception e) {
+                peopleInfo.add(null);
             }
         }
-        for (int i = 0; i < tempList.length; i++) {
-            if (tempList[i].contains("googleusercontent")) {
-                String name = tempList[i + 2];
-                if (name.matches("^[A-Za-z- ]+")) {
-                    try {
-                        Double longitude = Double.parseDouble(tempList[i + 10]);
-                        Double latitude = Double.parseDouble(tempList[i + 9]);
-                        return new People(name, longitude, latitude);
-                    } catch (Exception e) {
-                        return null;
-                    }
-                }
-            }
+
+        try {
+            // do the same with current user
+            peopleInfo.add(new People("Current User",
+                    Double.parseDouble(parser.grabInnerData(nearbyData,
+                            new ArrayList<>(List.of(nearbyData.size() - 1, 1, 1, 2)))),
+                    Double.parseDouble(parser.grabInnerData(nearbyData,
+                            new ArrayList<>(List.of(nearbyData.size() - 1, 1, 1, 1))))));
+        } catch (Exception e) {
+            peopleInfo.add(null);
         }
-        return null;
+
+        return peopleInfo;
     }
 
     // Define a method to send a GET request and return the response as a string

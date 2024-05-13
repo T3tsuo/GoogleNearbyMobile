@@ -9,7 +9,7 @@ public class People {
     private final double latitude;
     private final double longitude;
 
-    public People(String name, Double longitude, Double latitude) {
+    public People(String name, Double latitude, Double longitude) {
         this.name = name;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -27,6 +27,6 @@ public class People {
 
     @NonNull
     public String toString() {
-        return getName() + "    (" + latitude + ", " + longitude + ")";
+        return getName() + ", (" + latitude + ", " + longitude + ")";
     }
 }
