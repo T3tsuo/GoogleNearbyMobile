@@ -17,7 +17,7 @@ public class ParseString {
         splittedList[0] = splittedList[0].substring(1);
 
         List<Object> results = parseStringHelper(splittedList, new ArrayList<>());
-        System.out.println(results);
+        
         return results;
     }
 
