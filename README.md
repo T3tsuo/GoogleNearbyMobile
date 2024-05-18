@@ -1,5 +1,5 @@
 # GoogleNearbyMobile
-Looked at what the python library locationsharinglib does and did the bare minimum for what I want an android app to do in Java. Similar to my GoogleNearby project.
+Looked at what the python library [locationsharinglib](https://github.com/costastf/locationsharinglib) does and did the bare minimum for what I want an android app to do in Java. Similar to my GoogleNearby project.
 
 ## How to get cookies file on Android without a PC.
 * First download Kiwi Browser on the Google Playstore (allows extensions).
