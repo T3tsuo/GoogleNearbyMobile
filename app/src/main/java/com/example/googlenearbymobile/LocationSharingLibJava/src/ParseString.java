@@ -15,10 +15,8 @@ public class ParseString {
 
         // remove first character [
         splittedList[0] = splittedList[0].substring(1);
-
-        List<Object> results = parseStringHelper(splittedList, new ArrayList<>());
         
-        return results;
+        return parseStringHelper(splittedList, new ArrayList<>());
     }
 
     private ArrayList<Object> parseStringHelper(String[] splittedList, ArrayList<Object> newList) {
