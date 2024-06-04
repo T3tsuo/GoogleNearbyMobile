@@ -1,6 +1,8 @@
 # GoogleNearbyMobile
 Looked at what the python library [locationsharinglib](https://github.com/costastf/locationsharinglib) does and did the bare minimum for what I want an android app to do in Java. Similar to my GoogleNearby project.
 
+TURN OFF BATTERY OPTIMIZATION ON APP
+
 ## How to get cookies file on Android without a PC.
 * First download Kiwi Browser on the Google Playstore (allows extensions).
 * Only use one google account on this browser and stay on desktop mode.
