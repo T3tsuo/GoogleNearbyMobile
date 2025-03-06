@@ -3,6 +3,11 @@ Looked at what the python library [locationsharinglib](https://github.com/costas
 
 TURN OFF BATTERY OPTIMIZATION ON APP
 
+## Purpose of this app
+This app use your google maps cookie session to notify you about where people are on your maps (if people are sharing their livetime location to you). There are two types of notification:
+* When a person is within 300 meters you will be notified, as well as when they are no longer nearby (1 hour buffer after each notification so it doesn't spam you)
+* When you load a saved_locations.txt file with coordinates for specific people, the app will notify you when the specific person is within 150 meters from that coordinate as well as when they leave that area.
+
 ## How to get cookies file on Android without a PC.
 * First download Kiwi Browser on the Google Playstore (allows extensions).
 * Only use one google account on this browser and stay on desktop mode.
